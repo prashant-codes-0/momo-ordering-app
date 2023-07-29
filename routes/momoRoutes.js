@@ -3,7 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const momoController = require("../controllers/momoController");
-const authenticateUser = require("../middleware/authMiddleware");
+const authenticateUser = require("../middlewares/authMiddleware");
 
 router.get("/momo", momoController.getAllMomo);
 router.get("/momo/:id", momoController.getSingleMomo);
