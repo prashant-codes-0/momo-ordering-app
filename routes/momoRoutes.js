@@ -11,5 +11,6 @@ router.post("/momo", momoController.createMomo);
 router.put("/momo/:id", momoController.updateMomo);
 router.delete("/momo/:id", authenticateUser, momoController.deleteMomo);
 router.post("/momo/:id/order", authenticateUser, momoController.placeOrder);
+// router.post("/momo/:id/order", momoController.placeOrder);
 
 module.exports = router;

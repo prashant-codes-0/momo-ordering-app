@@ -1,6 +1,10 @@
 // This file contains the controller functions for momo CRUD operations and placing orders.
 
 const Momo = require("../models/Momo");
+const jwt = require("jsonwebtoken");
+const config = require("../config/config");
+
+
 
 const momoController = {
   createMomo: async (req, res) => {
@@ -93,27 +97,82 @@ const momoController = {
       }
     },
 
-  placeOrder: async (req, res) => {
-    // ... Place an order controller function
-      
+//   placeOrder: async (req, res) => {
+//     // ... Place an order controller function
+//     // Check if the user is authenticated
+//   const token = req.header("Authorization");
+//   if (!token) {
+//     return res.status(401).json({ error: "Authentication required" });
+//   }
+
+//   try {
+//     // Verify the JWT and extract the user data (if token is valid)
+//     const decodedToken = jwt.verify(token, config.jwtSecret);
+//     const userId = decodedToken.user;
+//     // You can use the userId to perform further checks if needed.
+
+//     // Get the Momo ID and order details from the request body
+//     const { id, deliveryAddress, phoneNumber } = req.body;
+
+//     // Find the Momo by ID
+//     const momo = await Momo.findById(id);
+//     if (!momo) {
+//       return res.status(404).json({ error: "Momo not found" });
+//     }
+
+//     // Save the order details (delivery address and phone number) in the Momo document
+//     momo.deliveryAddress = deliveryAddress;
+//     momo.phoneNumber = phoneNumber;
+//     await momo.save();
+
+//     res.status(200).json({ message: "Order placed successfully" });
+//   } catch (error) {
+//     res.status(500).json({ error: "Failed to place the order" });
+//   }
+// },
+
+
+//delete this 
+placeOrder: async (req, res) => {
+const token = req.header("Authorization");
+  if (!token) {
+    return res.status(401).json({ error: "Authentication required" });
+  }
+console.log("Request Body:", req.body);
+
+  try {
+    // Verify the JWT and extract the user data (if token is valid)
+    const decodedToken = jwt.verify(token, config.jwtSecret);
+    const userId = decodedToken.user;
+    // You can use the userId to perform further checks if needed.
+
+    // Get the Momo ID and order details from the request body
     const { id, deliveryAddress, phoneNumber } = req.body;
+    
+    console.log("Received _id:", req.params.id); // i added the req.params mnyself it was just id at first !!!
 
-    try {
-      const momo = await Momo.findById(id);
-      if (!momo) return res.status(404).json({ error: "Momo not found" });
-
-      // Perform any additional validations if required
-
-      // Save the order details (delivery address and phone number) in the momo document
-      momo.deliveryAddress = deliveryAddress;
-      momo.phoneNumber = phoneNumber;
-      await momo.save();
-
-      res.status(200).json({ message: "Order placed successfully" });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to place the order" });
+    // Find the Momo by ID
+    // const momo = await Momo.findById(id);
+    const momoId = req.body._id; // Use a different variable name, e.g., momoId
+    const momo = await Momo.findById(momoId);
+    if (!momo) {
+      return res.status(404).json({ error: "Momo not found" });
+     
     }
-  },
+
+    // Save the order details (delivery address and phone number) in the Momo document
+    momo.deliveryAddress = deliveryAddress;
+    momo.phoneNumber = phoneNumber;
+    await momo.save();
+
+    res.status(200).json({ message: "Order placed successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to place the order" });
+  }
+}
+      
+    
+  
   
 };
 

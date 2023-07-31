@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const config=require("../config/config")
 
 const authController = {
   registerUser: async (req, res) => {
@@ -43,15 +44,15 @@ const authController = {
       }
 
       // Generate a JWT token
-      const token = jwt.sign({ userId: user._id, email: user.email, role: user.role }, "ABCD", {
-        expiresIn: "1h", // Token expiration time
+      const token = jwt.sign({ userId: user._id, email: user.email, role: user.role }, config.jwtSecret, {
+        expiresIn: "4h", // Token expiration time
       });
 
       res.status(200).json({ token });
     } catch (error) {
       res.status(500).json({ error: "Failed to login" });
     }
-  },
+  }
 };
 
 module.exports = authController;
