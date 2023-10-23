@@ -1,2 +1,9 @@
 # momo-ordering-app
-For the internship project // Bsc CSIT 8th semester
+# Inside the backend folder, run:
+cd backend
+npm install
+
+# Inside the frontend folder, run:
+cd frontend
+npm install
+
